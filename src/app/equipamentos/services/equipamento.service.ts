@@ -1,25 +1,38 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
+import { ToastrService } from 'ngx-toastr';
 import { Observable } from 'rxjs';
 import { Equipamento } from '../models/equipamento.model';
+
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class EquipamentoService {
   private registros: AngularFirestoreCollection<Equipamento>
-  constructor(private firestore: AngularFirestore) {
+  constructor(private toastr: ToastrService, private firestore: AngularFirestore) {
     this.registros = this.firestore.collection<Equipamento>("equipamentos");
   }
 
   public async inserir(registro: Equipamento): Promise<any> {
-    if (!registro)
-      return Promise.reject("Item inválido");
-
+    if (registro.nome === null) {
+      this.toastr.error('Preencha todas as informações', 'Equipamento incompleto')
+      this.excluir(registro)
+    }
+    if (registro.precoAquisicao === null) {
+      this.toastr.error('Preencha todas as informações', 'Equipamento incompleto')
+      this.excluir(registro)
+    }
+    if (registro.dataDeFabricacao === null) {
+      this.toastr.error('Preencha todas as informações', 'Equipamento incompleto')
+      this.excluir(registro)
+    }
     const res = await this.registros.add(registro).then(res => {
       registro.numeroDeSerie = res.id;
       this.registros.doc(res.id).set(registro);
     })
+    this.toastr.success('Equipamento inserido com sucesso');
   }
 
   public async editar(registro: Equipamento): Promise<void> {

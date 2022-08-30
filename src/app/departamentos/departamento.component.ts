@@ -4,6 +4,7 @@ import { Departamento } from './models/departamento.model';
 import { DepartamentoService } from './services/departamento.service';
 import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-departamento',
@@ -14,8 +15,13 @@ export class DepartamentoComponent implements OnInit {
   public departamentos$: Observable<Departamento[]>;
   public form: FormGroup;
 
-  constructor(private departamentoService: DepartamentoService, private fb: FormBuilder, private modalService: NgbModal) { }
-
+  constructor(private toastr: ToastrService, private departamentoService: DepartamentoService, private fb: FormBuilder, private modalService: NgbModal) { }
+  mensagemEdicao() {
+    this.toastr.success('Departamento editado com sucesso');
+  }
+  mensagemExclusao() {
+    this.toastr.warning('Departamento excluido');
+  }
   ngOnInit(): void {
     this.departamentos$ = this.departamentoService.selecionarTodos();
 
@@ -50,10 +56,11 @@ export class DepartamentoComponent implements OnInit {
 
       if (!departamento)
         await this.departamentoService.inserir(this.form.value)
-      else
-        await this.departamentoService.editar(this.form.value);
+      else {
+        await this.departamentoService.editar(this.form.value)
+        this.mensagemEdicao();
+      }
 
-      console.log(`O departamento foi salvo com sucesso!`)
     }
     catch (_error) {
 
@@ -64,7 +71,7 @@ export class DepartamentoComponent implements OnInit {
 
   public excluir(departamento: Departamento) {
     this.departamentoService.excluir(departamento);
-
+    this.mensagemExclusao();
   }
 
 
