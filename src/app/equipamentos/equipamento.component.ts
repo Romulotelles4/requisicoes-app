@@ -1,7 +1,6 @@
 import { Component, OnInit, TemplateRef } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
-import { DepartamentoService } from '../departamentos/services/departamento.service';
 import { Equipamento } from './models/equipamento.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EquipamentoService } from './services/equipamento.service';
@@ -28,9 +27,9 @@ export class EquipamentoComponent implements OnInit {
 
     this.form = this.fb.group({
       numeroDeSerie: new FormControl(""),
-      nome: new FormControl(""),
-      precoAquisicao: new FormControl(""),
-      dataDeFabricacao: new FormControl("")
+      nome: new FormControl("", [Validators.required, Validators.minLength(3)]),
+      precoAquisicao: new FormControl("", Validators.required),
+      dataDeFabricacao: new FormControl("", Validators.required)
     })
   }
   get tituloModal(): string {

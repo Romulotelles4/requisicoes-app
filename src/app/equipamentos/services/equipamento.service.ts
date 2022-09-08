@@ -16,18 +16,6 @@ export class EquipamentoService {
   }
 
   public async inserir(registro: Equipamento): Promise<any> {
-    if (registro.nome === null) {
-      this.toastr.error('Preencha todas as informações', 'Equipamento incompleto')
-      this.excluir(registro)
-    }
-    if (registro.precoAquisicao === null) {
-      this.toastr.error('Preencha todas as informações', 'Equipamento incompleto')
-      this.excluir(registro)
-    }
-    if (registro.dataDeFabricacao === null) {
-      this.toastr.error('Preencha todas as informações', 'Equipamento incompleto')
-      this.excluir(registro)
-    }
     const res = await this.registros.add(registro).then(res => {
       registro.numeroDeSerie = res.id;
       this.registros.doc(res.id).set(registro);

@@ -15,15 +15,6 @@ export class DepartamentoService {
   }
 
   public async inserir(registro: Departamento): Promise<any> {
-    if (registro.nome === null) {
-      this.toastr.error('Preencha todas as informações', 'Departamento incompleto')
-      this.excluir(registro)
-    }
-    if (registro.telefone === null) {
-      this.toastr.error('Preencha todas as informações', 'Departamento incompleto')
-      this.excluir(registro)
-    }
-
     const res = await this.registros.add(registro).then(res => {
       registro.id = res.id;
       this.registros.doc(res.id).set(registro);

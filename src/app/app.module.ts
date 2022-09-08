@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { NgModule } from '@angular/core';
 import { AngularFireModule } from '@angular/fire/compat';
 import { AngularFireAuthModule } from '@angular/fire/compat/auth';
 import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
@@ -17,7 +17,13 @@ import { EquipamentoModule } from './equipamentos/equipamento.module';
 import { ToastrModule } from 'ngx-toastr';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import ptBr from '@angular/common/locales/pt';
+import { registerLocaleData } from '@angular/common';
+import { LOCALE_ID, DEFAULT_CURRENCY_CODE } from '@angular/core';
+import { FuncionarioModule } from './funcionarios/funcionario.module';
+import { RequisicaoModule } from './requisicoes/requisicao.module';
 
+registerLocaleData(ptBr);
 
 @NgModule({
   declarations: [
@@ -34,12 +40,20 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
+    FuncionarioModule,
     DepartamentoModule,
+    RequisicaoModule,
     EquipamentoModule,
     BrowserAnimationsModule,
-    ToastrModule.forRoot()
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-right'
+    })
   ],
-  providers: [AuthenticationService],
+  providers: [
+    AuthenticationService,
+    { provide: LOCALE_ID, useValue: "pt" },
+    { provide: DEFAULT_CURRENCY_CODE, useValue: "BRL" }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

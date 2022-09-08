@@ -1,22 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { EquipamentoRoutingModule } from './equipamento-routing.module';
-import { EquipamentoComponent } from './equipamento.component';
+import { RequisicaoRoutingModule } from './requisicao-routing.module';
+import { RequisicaoComponent } from './requisicao.component';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { ReactiveFormsModule } from '@angular/forms';
-import { CurrencyMaskModule } from 'ng2-currency-mask';
+
 
 @NgModule({
   declarations: [
-    EquipamentoComponent
+    RequisicaoComponent
   ],
   imports: [
     CommonModule,
-    CurrencyMaskModule,
     ReactiveFormsModule,
     NgbModule,
-    EquipamentoRoutingModule,
+    NgSelectModule,
+    RequisicaoRoutingModule
   ]
 })
-export class EquipamentoModule { }
+export class RequisicaoModule { }

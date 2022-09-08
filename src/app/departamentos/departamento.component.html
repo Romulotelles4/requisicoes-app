@@ -53,10 +53,16 @@
         </div>
         <form [formGroup]="form" (ngSubmit)="modal.close('gravar')">
                 <div class="modal-body">
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-3 position-relative">
                                 <label for="nome" class="form-label">Nome do departamento</label>
-                                <input formControlName="nome" type="text" class="form-control"
-                                        placeholder="Digite o nome do departamento">
+                                <input formControlName="nome"
+                                        [ngClass]="(nome?.touched && nome?.invalid) ? 'is-invalid' : ''" type="text"
+                                        class="form-control" placeholder="Digite o nome do departamento">
+                                <div class="invalid-tooltip" *ngIf="nome?.touched && nome?.invalid">
+                                        <span *ngIf="nome?.errors?.['required']">O nome deve ser preenchido.</span>
+                                        <span *ngIf="nome?.errors?.['minlength']">O nome deve ter no mínimo 3
+                                                letras.</span>
+                                </div>
                         </div>
                         <div class="form-group mb-3">
                                 <label for="telefone" class="form-label">Telefone do departamento</label>
@@ -67,7 +73,8 @@
                 <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary"
                                 (click)="modal.dismiss('fechar')">Cancelar</button>
-                        <button type="submit" class="btn btn-primary col-md-3">Gravar</button>
+                        <button type="submit" class="btn btn-primary col-md-3"
+                                [disabled]="this.form.invalid">Gravar</button>
                 </div>
         </form>
 </ng-template>

@@ -30,8 +30,9 @@
                                                 <tr *ngFor="let equipamento of (equipamentos$ | async)">
                                                         <td>{{equipamento.numeroDeSerie}}</td>
                                                         <td>{{equipamento.nome}}</td>
-                                                        <td><span>R$</span>{{equipamento.precoAquisicao}}</td>
-                                                        <td>{{equipamento.dataDeFabricacao}}</td>
+                                                        <td>{{equipamento.precoAquisicao | currency}}
+                                                        </td>
+                                                        <td>{{equipamento.dataDeFabricacao | date: 'dd/MM/yyyy'}}</td>
 
                                                         <td class="d-grid d-md-block">
                                                                 <button (click)="gravar(modal, equipamento)"
@@ -60,26 +61,48 @@
         </div>
         <form [formGroup]="form" (ngSubmit)="modal.close('gravar')">
                 <div class="modal-body">
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-3 position-relative">
                                 <label for="nome" class="form-label">Nome do equipamento</label>
-                                <input formControlName="nome" type="text" class="form-control"
-                                        placeholder="Digite o nome do equipamento">
+                                <input formControlName="nome"
+                                        [ngClass]="(nome?.touched && nome?.invalid) ? 'is-invalid' : ''" type="text"
+                                        class="form-control" placeholder="Digite o nome do equipamento">
+                                <div class="invalid-tooltip" *ngIf="nome?.touched && nome?.invalid">
+                                        <span *ngIf="nome?.errors?.['required']">O nome precisa ser preenchido.</span>
+                                        <span *ngIf="nome?.errors?.['minlength']">O nome precisa ter no mínimo 3
+                                                letras.</span>
+                                </div>
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-3 position-relative">
                                 <label for="precoAquisicao" class="form-label">Preço de Aquisição</label>
-                                <input formControlName="precoAquisicao" type="text" class="form-control"
-                                        placeholder="Digite o preço do equipamento">
+                                <input formControlName="precoAquisicao"
+                                        [ngClass]="(precoAquisicao?.touched && nome?.invalid) ? 'is-invalid' : ''"
+                                        type="text" currencyMask
+                                        [options]="{prefix: 'R$ ' , thousands: '.' , decimal: ',', align: 'left'}"
+                                        class="form-control" placeholder="R$ 0,00">
+                                <div class="invalid-tooltip" *ngIf="precoAquisicao?.touched && precoAquisicao?.invalid">
+                                        <span *ngIf="precoAquisicao?.errors?.['required']">O preço precisa ser
+                                                preenchido</span>
+                                </div>
+
                         </div>
-                        <div class="form-group mb-3">
+                        <div class="form-group mb-3 position-relative">
                                 <label for="dataDeFabricacao" class="form-label">Data de fabricação</label>
-                                <input formControlName="dataDeFabricacao" type="date" class="form-control"
+                                <input formControlName="dataDeFabricacao"
+                                        [ngClass]="(dataDeFabricacao?.touched && dataDeFabricacao?.invalid) ? 'is-invalid' : ''"
+                                        type="date" class="form-control"
                                         placeholder="Informe a data de fabricação do equipamento">
+                                <div class="invalid-tooltip"
+                                        *ngIf="dataDeFabricacao?.touched && dataDeFabricacao?.invalid">
+                                        <span *ngIf="dataDeFabricacao?.errors?.['required']">A data de fabricação deve
+                                                ser preenchida.</span>
+                                </div>
                         </div>
                 </div>
                 <div class="modal-footer">
                         <button type="button" class="btn btn-outline-primary"
                                 (click)="modal.dismiss('fechar')">Cancelar</button>
-                        <button type="submit" class="btn btn-primary col-md-3">Gravar</button>
+                        <button type="submit" class="btn btn-primary col-md-3"
+                                [disabled]="this.form.invalid">Gravar</button>
                 </div>
         </form>
 </ng-template>
