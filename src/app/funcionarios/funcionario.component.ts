@@ -8,7 +8,7 @@ import { AuthenticationService } from '../auth/services/authentication.service';
 import { Departamento } from '../departamentos/models/departamento.model';
 import { DepartamentoService } from '../departamentos/services/departamento.service';
 import { Funcionario } from './models/funcionario.model';
-import { FuncionaioService } from './services/funcionaio.service';
+import { FuncionarioService } from './services/funcionario.service';
 
 @Component({
   selector: 'app-funcionario',
@@ -24,7 +24,7 @@ export class FuncionarioComponent implements OnInit {
     private router: Router,
     private authService: AuthenticationService,
     private fb: FormBuilder,
-    private funcionarioService: FuncionaioService,
+    private funcionarioService: FuncionarioService,
     private departamentoService: DepartamentoService,
     private modalService: NgbModal,
     private toastr: ToastrService
@@ -39,7 +39,7 @@ export class FuncionarioComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-        funcionario: new FormGroup({
+      funcionario: new FormGroup({
         id: new FormControl(""),
         nome: new FormControl("", [Validators.required, Validators.minLength(3)]),
         email: new FormControl("", [Validators.required, Validators.email]),

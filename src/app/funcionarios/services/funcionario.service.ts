@@ -1,16 +1,16 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { ToastrService } from 'ngx-toastr';
-import { map, Observable, pipe } from 'rxjs';
+import { map, Observable, pipe, take } from 'rxjs';
 import { Departamento } from 'src/app/departamentos/models/departamento.model';
 import { Funcionario } from '../models/funcionario.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class FuncionaioService {
+export class FuncionarioService {
   private registros: AngularFirestoreCollection<Funcionario>
-  
+
   constructor(private toastr: ToastrService, private firestore: AngularFirestore) {
     this.registros = this.firestore.collection<Funcionario>("funcionarios");
   }
@@ -45,5 +45,16 @@ export class FuncionaioService {
         return funcionarios;
       })
     )
+  }
+  public selecionarFuncionarioLogado(email: string): Observable<Funcionario> {
+    return this.firestore
+      .collection<Funcionario>("funcionarios", ref => {
+        return ref.where("email", "==", email)
+      })
+      .valueChanges()
+      .pipe(
+        take(1),
+        map(funcionarios => funcionarios[0])
+      )
   }
 }

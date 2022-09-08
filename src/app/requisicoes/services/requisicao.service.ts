@@ -4,6 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { map, Observable, pipe } from 'rxjs';
 import { Departamento } from 'src/app/departamentos/models/departamento.model';
 import { Equipamento } from 'src/app/equipamentos/models/equipamento.model';
+import { Funcionario } from 'src/app/funcionarios/models/funcionario.model';
 import { Requisicao } from '../models/requisicao.model';
 
 @Injectable({
@@ -12,8 +13,8 @@ import { Requisicao } from '../models/requisicao.model';
 export class RequisicaoService {
   private registros: AngularFirestoreCollection<Requisicao>
 
-  constructor(private toastr: ToastrService, private firestore: AngularFirestore) { 
-    this.registros = this.firestore.collection<Requisicao>("funcionarios");
+  constructor(private toastr: ToastrService, private firestore: AngularFirestore) {
+    this.registros = this.firestore.collection<Requisicao>("requisicoes");
   }
 
   public async inserir(registro: Requisicao): Promise<any> {
@@ -41,10 +42,31 @@ export class RequisicaoService {
             .collection<Departamento>("departamentos")
             .doc(requisicao.departamentoId)
             .valueChanges()
-            .subscribe(x => requisicao.departamento = x);
+            .subscribe(d => requisicao.departamento = d);
+          this.firestore
+            .collection<Funcionario>("funcionarios")
+            .doc(requisicao.funcionarioId)
+            .valueChanges()
+            .subscribe(f => requisicao.funcionario = f);
+          if (requisicao.equipamentoId) {
+            this.firestore
+              .collection<Equipamento>("equipamentos")
+              .doc(requisicao.equipamentoId)
+              .valueChanges()
+              .subscribe(e => requisicao.equipamento = e);
+          }
         });
         return requisicoes;
       })
     )
   }
+  public selecionarRequisicoesFuncionarioAtual(id: string) {
+    return this.selecionarTodos()
+      .pipe(
+        map(requisicoes => {
+          return requisicoes.filter(req => req.funcionarioId === id);
+        }
+        ))
+  }
+  
 }
