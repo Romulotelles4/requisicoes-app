@@ -19,6 +19,4 @@ import { RequisicaoService } from './services/requisicao.service';
   styleUrls: ['./requisicao.component.css']
 })
 export class RequisicaoComponent{
-
-  
 }

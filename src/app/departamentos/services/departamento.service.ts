@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/compat/firestore';
 import { ToastrService } from 'ngx-toastr';
-import { Observable } from 'rxjs';
+import { map, Observable, pipe, take } from 'rxjs';
 import { Departamento } from '../models/departamento.model';
 
 @Injectable({

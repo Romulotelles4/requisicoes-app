@@ -68,5 +68,14 @@ export class RequisicaoService {
         }
         ))
   }
-  
+
+  public selecionarRequisicoesDepartamentoAtual(id: string) {
+    return this.selecionarTodos()
+      .pipe(
+        map(requisicoes => {
+          return requisicoes.filter(req => req.departamentoId === id);
+        }
+        ))
+  }
+
 }
