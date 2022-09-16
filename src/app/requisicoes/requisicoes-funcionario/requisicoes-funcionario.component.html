@@ -28,10 +28,12 @@
                                         </thead>
                                         <tbody class="text-center">
                                                 <tr *ngFor="let requisicao of (requisicoes$ | async)">
-                                                        <td>{{requisicao.dataAbertura}}</td>
-                                                        <td>{{requisicao.departamentoId}}</td>
+                                                        <td>{{requisicao.dataAbertura.toDate() | date: 'dd/MM/yyy
+                                                                HH:mm'}}
+                                                        </td>
+                                                        <td>{{requisicao.departamento?.nome}}</td>
                                                         <td>{{requisicao.descricao}}</td>
-                                                        <td>{{requisicao.equipamentoId}}</td>
+                                                        <td>{{requisicao.equipamento?.nome}}</td>
 
 
                                                         <td class="d-grid d-md-block">
@@ -59,7 +61,7 @@
                 <h4 class="modal-title" id="modal-basic-title">{{tituloModal}} de Requisições</h4>
                 <button type="button" class="btn-close" aria-label="Close" (click)="modal.dismiss('fechar')"></button>
         </div>
-        <form [formGroup]="form" (ngSubmit)="modal.close('gravar'); ArrumarData();">
+        <form [formGroup]="form" (ngSubmit)="modal.close('gravar');">
                 <div class="modal-body">
                         <div class="form-group mb-3 position-relative">
                                 <label for="departamentoId" class="form-label">Departamento destino</label>
@@ -67,7 +69,7 @@
                                         [ngClass]="(departamentoId?.touched && departamentoId?.invalid) ? 'is-invalid' : ''"
                                         type="departamentoId" [clearable]="false" [searchable]="false">
                                         <ng-option *ngFor="let departamento of (departamentos$ | async)"
-                                                [value]="departamento.nome">
+                                                [value]="departamento.id">
                                                 {{departamento.nome}}
                                         </ng-option>
                                 </ng-select>
@@ -79,9 +81,10 @@
                         </div>
                         <div class="form-group mb-3 position-relative">
                                 <label for="descricao" class="form-label">Descrição</label>
-                                <input formControlName="descricao"
+                                <textarea formControlName="descricao"
                                         [ngClass]="(descricao?.touched && descricao?.invalid) ? 'is-invalid' : ''"
-                                        type="text" class="form-control" placeholder="Digite a descrição da requisição">
+                                        type="text" class="form-control"
+                                        placeholder="Digite a descrição da requisição"></textarea>
                                 <div class="invalid-tooltip" *ngIf="descricao?.touched && descricao?.invalid">
                                         <span *ngIf="descricao?.errors?.['required']">A descrição precisa ser
                                                 preenchida.</span>
@@ -97,7 +100,7 @@
                                         [ngClass]="(equipamentoId?.touched && equipamentoId?.invalid) ? 'is-invalid' : ''"
                                         type="equipamentoId" [clearable]="false" [searchable]="false">
                                         <ng-option *ngFor="let equipamento of (equipamentos$ | async)"
-                                                [value]="equipamento.nome">
+                                                [value]="equipamento.numeroDeSerie">
                                                 {{equipamento.nome}}
                                         </ng-option>
                                 </ng-select>

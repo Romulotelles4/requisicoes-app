@@ -33,7 +33,7 @@
                                                         <td>{{funcionario.nome}}</td>
                                                         <td>{{funcionario.email}}</td>
                                                         <td>{{funcionario.funcao}}</td>
-                                                        <td>{{funcionario.departamentoId}}</td>
+                                                        <td>{{funcionario.departamento?.nome}}</td>
 
                                                         <td class="d-grid d-md-block">
                                                                 <button (click)="gravar(modal, funcionario)"
@@ -110,7 +110,7 @@
                                                 [ngClass]="(departamentoId?.touched && departamentoId?.invalid) ? 'is-invalid' : ''"
                                                 type="departamentoId" [clearable]="false" [searchable]="false">
                                                 <ng-option *ngFor="let departamento of (departamentos$ | async)"
-                                                        [value]="departamento.nome">
+                                                        [value]="departamento.id">
                                                         {{departamento.nome}}
                                                 </ng-option>
                                         </ng-select>

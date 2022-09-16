@@ -58,7 +58,11 @@ export class RequisicoesFuncionarioComponent implements OnInit, OnDestroy {
       departamento: new FormControl(""),
 
       equipamentoId: new FormControl("", [Validators.required]),
-      equipamento: new FormControl("")
+      equipamento: new FormControl(""),
+
+      status: new FormControl(""),
+      ultimaAtualizacao: new FormControl(""),
+      movimentacoes: new FormControl("")
     })
     this.departamentos$ = this.departamentoService.selecionarTodos();
     this.equipamentos$ = this.equipamentoService.selecionarTodos();
@@ -110,10 +114,22 @@ export class RequisicoesFuncionarioComponent implements OnInit, OnDestroy {
   }
 
   public async gravar(modal: TemplateRef<any>, requisicao?: Requisicao) {
-    this.form.reset();
+    this.form.reset()
+    this.configurarValoresPadrao()
 
-    if (requisicao)
-      this.form.setValue(requisicao);
+    if (requisicao) {
+      const departamento = requisicao.departamento ? requisicao.departamento : null;
+      const funcionario = requisicao.funcionario ? requisicao.funcionario : null;
+      const equipamento = requisicao.equipamento ? requisicao.equipamento : null;
+
+      const requisicaoCompleta = {
+        ...requisicao,
+        departamento,
+        funcionario,
+        equipamento
+      }
+      this.form.setValue(requisicaoCompleta);
+    }
 
     try {
       await this.modalService.open(modal).result;
@@ -124,10 +140,12 @@ export class RequisicoesFuncionarioComponent implements OnInit, OnDestroy {
         await this.requisicaoService.editar(this.form.value)
         this.mensagemEdicao();
       }
-
     }
     catch (_error) {
+      if (_error != "fechar" && _error != "1" && _error != "0")
+        this.toastr.error("Ocorreu um erro.")
     }
+
   }
 
   public excluir(requisicao: Requisicao) {
@@ -135,13 +153,13 @@ export class RequisicoesFuncionarioComponent implements OnInit, OnDestroy {
     this.mensagemExclusao();
   }
 
-  public ArrumarData() {
-    var dataAbertura = new Date();
-    var dia = dataAbertura.getDay();
-    var mes = dataAbertura.getMonth();
-    var ano = dataAbertura.getFullYear();
-    var dataHoje: string = `${dia + 4}/${mes + 1}/${ano}`
-    console.log(dataHoje)
-    this.form.get("dataAbertura")?.setValue(dataHoje)
+  public configurarValoresPadrao(): void {
+    this.form.patchValue({
+      status: "Aberta",
+      dataAbertura: new Date(),
+      ultimaAtualizacao: new Date(),
+      equipamentoId: null,
+      funcionarioId: this.funcionarioLogadoId
+    });
   }
 }

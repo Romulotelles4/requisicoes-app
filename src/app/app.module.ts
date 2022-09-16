@@ -40,10 +40,6 @@ registerLocaleData(ptBr);
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
     AngularFirestoreModule,
-    FuncionarioModule,
-    DepartamentoModule,
-    RequisicaoModule,
-    EquipamentoModule,
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       positionClass: 'toast-bottom-right'

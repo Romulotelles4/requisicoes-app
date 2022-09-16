@@ -32,19 +32,19 @@ export class FuncionarioService {
   }
 
   public selecionarTodos(): Observable<Funcionario[]> {
-    return this.registros.valueChanges();
-    pipe(
-      map((funcionarios: Funcionario[]) => {
-        funcionarios.forEach(funcionario => {
-          this.firestore
-            .collection<Departamento>("departamentos")
-            .doc(funcionario.departamentoId)
-            .valueChanges()
-            .subscribe(x => funcionario.departamento = x);
-        });
-        return funcionarios;
-      })
-    )
+    return this.registros.valueChanges()
+      .pipe(
+        map((funcionarios: Funcionario[]) => {
+          funcionarios.forEach(funcionario => {
+            this.firestore
+              .collection<Departamento>("departamentos")
+              .doc(funcionario.departamentoId)
+              .valueChanges()
+              .subscribe(x => funcionario.departamento = x);
+          });
+          return funcionarios;
+        })
+      );
   }
   public selecionarFuncionarioLogado(email: string): Observable<Funcionario> {
     return this.firestore

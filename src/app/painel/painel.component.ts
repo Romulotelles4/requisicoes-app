@@ -10,17 +10,17 @@ import { AuthenticationService } from '../auth/services/authentication.service';
 })
 export class PainelComponent implements OnInit, OnDestroy {
   emailUsuario?: string | null;
-  ususarioLogado$: Subscription;
+  usuarioLogado$: Subscription;
 
   constructor(private authService: AuthenticationService, private router: Router) { }
 
   ngOnInit(): void {
-    this.ususarioLogado$ = this.authService.usuarioLogado
+    this.usuarioLogado$ = this.authService.usuarioLogado
       .subscribe(usuario => this.emailUsuario = usuario?.email);
   }
 
   ngOnDestroy(): void {
-    this.ususarioLogado$.unsubscribe();
+    this.usuarioLogado$.unsubscribe();
   }
 
   public sair() {
