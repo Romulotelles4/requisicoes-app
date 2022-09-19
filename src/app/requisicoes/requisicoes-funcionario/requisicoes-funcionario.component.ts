@@ -23,7 +23,7 @@ export class RequisicoesFuncionarioComponent implements OnInit, OnDestroy {
   public departamentos$: Observable<Departamento[]>
   public equipamentos$: Observable<Equipamento[]>
   public processoAutenticado$: Subscription
-  public funcionarioLogadoId: string;
+  public funcionarioLogado: Funcionario;
   public form: FormGroup
 
   constructor(
@@ -66,13 +66,13 @@ export class RequisicoesFuncionarioComponent implements OnInit, OnDestroy {
     })
     this.departamentos$ = this.departamentoService.selecionarTodos();
     this.equipamentos$ = this.equipamentoService.selecionarTodos();
+    this.requisicoes$ = this.requisicaoService.selecionarTodos();
 
     this.processoAutenticado$ = this.authService.usuarioLogado.subscribe(usuario => {
       const email: string = usuario?.email!;
       this.funcionarioService.selecionarFuncionarioLogado(email)
         .subscribe(funcionario => {
-          this.funcionarioLogadoId = funcionario.id;
-          this.requisicoes$ = this.requisicaoService.selecionarRequisicoesFuncionarioAtual(this.funcionarioLogadoId);
+          this.funcionarioLogado = funcionario;
         })
     })
   }
@@ -159,7 +159,7 @@ export class RequisicoesFuncionarioComponent implements OnInit, OnDestroy {
       dataAbertura: new Date(),
       ultimaAtualizacao: new Date(),
       equipamentoId: null,
-      funcionarioId: this.funcionarioLogadoId
+      funcionarioId: this.funcionarioLogado.id
     });
   }
 }

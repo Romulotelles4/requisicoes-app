@@ -5,6 +5,7 @@ import { Equipamento } from './models/equipamento.model';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { EquipamentoService } from './services/equipamento.service';
 import { ToastrService } from 'ngx-toastr';
+import { dataFuturaValidator } from './shared/validators/data-futura.validator';
 
 @Component({
   selector: 'app-equipamento',
@@ -29,7 +30,7 @@ export class EquipamentoComponent implements OnInit {
       numeroDeSerie: new FormControl(""),
       nome: new FormControl("", [Validators.required, Validators.minLength(3)]),
       precoAquisicao: new FormControl("", Validators.required),
-      dataDeFabricacao: new FormControl("", Validators.required)
+      dataDeFabricacao: new FormControl("", [Validators.required, dataFuturaValidator()])
     })
   }
   get tituloModal(): string {

@@ -94,7 +94,10 @@
                                 <div class="invalid-tooltip"
                                         *ngIf="dataDeFabricacao?.touched && dataDeFabricacao?.invalid">
                                         <span *ngIf="dataDeFabricacao?.errors?.['required']">A data de fabricação deve
-                                                ser preenchida.</span>
+                                                ser preenchida.
+                                        </span>
+                                        <span *ngIf="dataDeFabricacao?.errors?.['dataFutura']">A data de fabricação não
+                                                pode exeder o dia de hoje.</span>
                                 </div>
                         </div>
                 </div>
